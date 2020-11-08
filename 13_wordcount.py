@@ -52,10 +52,35 @@ e conferindo cada etapa do seu progresso.
 """
 
 import sys
+import re
+
+def count_words(filename):
+    file = open(filename, 'r')
+
+    words = dict()
+
+    for line in file.readlines():
+        for word in line.split():
+            word = re.sub(r'\W', '', word)
+            word = word.casefold()
+            words.setdefault(word, 0)
+            words[word] += 1
+
+    return words
 
 
-# +++ SUA SOLUÇÃO +++
-# Defina as funções print_words(filename) e print_top(filename).
+def print_words(filename):
+    words = count_words(filename)
+
+    {print(f'{word}: {count}') for (word, count) in sorted(words.items())}
+
+
+def print_top(filename):
+    words = count_words(filename)
+
+    sorted_words = sorted(words.items(), key=lambda item: -item[1])
+
+    {print(f'{word}: {count}') for (word, count) in list(sorted_words)[0:20]}
 
 
 # A função abaixo chama print_words() ou print_top() de acordo com os
