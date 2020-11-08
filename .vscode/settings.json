@@ -1,0 +1,7 @@
+{
+    "liveshare.alwaysFollowHost": true,
+    "vsls-pomodoro.breakDuration": 5,
+    "extensions.ignoreRecommendations": true,
+    "liveshare.autoShareTerminals": true,
+    "files.autoSave": "off",
+}
