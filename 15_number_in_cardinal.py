@@ -30,41 +30,33 @@ OVER_THOUSANDS = {
     10**12: ("trilhão", "trilhões"),
 }
 
-def number_in_cardinal(number):
-    try:
-        return NUMBERS[number][0]
+def number_in_cardinal(number, nindex=0):
+    try: return NUMBERS[number][nindex]
     except: pass
 
-    over_values = []
-    over_strings = []
+    result = []
 
-    for ot in reversed(OVER_THOUSANDS):
-        value = (number - sum(over_values)) // ot * ot
+    over_sum = 0
+    for divisor in reversed(OVER_THOUSANDS):
+        value = (number - over_sum) // divisor * divisor
+        if not value: continue
 
-        if value > 0:
-            over_values.append(value)
-            simple_value = value // ot
-            ots = OVER_THOUSANDS[ot]
-            over_string = ots[0] if simple_value == 1 else ots[-1]
-            over_strings.append(f'{number_in_cardinal(simple_value)} {over_string}')
+        over_sum += value
+        simple_value = value // divisor
+        ots = OVER_THOUSANDS[divisor]
+        _suffix = ots[0] if simple_value == 1 else ots[-1]
+        result.append(f'{number_in_cardinal(simple_value)} {_suffix}')
 
-    placed_values = []
-    for pv in reversed(PLACE_VALUES):
-        value = (number - sum(over_values) - sum(placed_values)) // pv * pv
-        if value > 0:
-            placed_values.append(value)
-    
-    if len(placed_values) == 0 and len(over_strings) > 0:
-        return ', '.join(over_strings)
+    values_sum = 0
+    for dividor in reversed(PLACE_VALUES):
+        value = (number - over_sum - values_sum)
+        if not value in NUMBERS: value = (value // dividor) * dividor 
+        if not value: continue
 
-    # eleven until nineteen
-    if len(placed_values) > 1 and placed_values[-2] == 10:
-        placed_values[-1] += placed_values[-2]
-        del placed_values[-2]
+        values_sum += value
+        result.append(number_in_cardinal(value, -1))
 
-    number_as_string = ' e '.join([NUMBERS[n][-1] for n in placed_values])
-
-    return ', '.join(over_strings + [number_as_string])
+    return ' e '.join(result)
 
 
 # --- Daqui para baixo são apenas códigos auxiliáries de teste. ---
@@ -84,7 +76,8 @@ def test(f, in_, expected):
         sign = '❌'
         info = f'e o correto é {expected!r}'
 
-    print(f'{sign} {f.__name__}({in_!r}) retornou {out!r} {info}')
+    message = f'{f.__name__}({in_!r}) retornou {out!r} {info}'
+    print(f'{sign} {message}')
 
 if __name__ == '__main__':
     # Testes que verificam o resultado do seu código em alguns cenários.
@@ -93,15 +86,22 @@ if __name__ == '__main__':
     test(number_in_cardinal, 10, "dez")
     test(number_in_cardinal, 11, "onze")
     test(number_in_cardinal, 100, "cem")
+    test(number_in_cardinal, 101, "cento e um")
+    test(number_in_cardinal, 110, "cento e dez")
+    test(number_in_cardinal, 112, "cento e doze")
     test(number_in_cardinal, 123, "cento e vinte e três")
-    test(number_in_cardinal, 1234, "um mil, duzentos e trinta e quatro")
-    test(number_in_cardinal, 12345, "doze mil, trezentos e quarenta e cinco")
-    test(number_in_cardinal, 123456, "cento e vinte e três mil, quatrocentos e cinquenta e seis")
-    test(number_in_cardinal, 1234567, "um milhão, duzentos e trinta e quatro mil, quinhentos e sessenta e sete")
-    test(number_in_cardinal, 12345678, "doze milhões, trezentos e quarenta e cinco mil, seiscentos e setenta e oito")
-    test(number_in_cardinal, 123456789, "cento e vinte e três milhões, quatrocentos e cinquenta e seis mil, setecentos e oitenta e nove")
-    test(number_in_cardinal, 1234567890, "um bilhão, duzentos e trinta e quatro milhões, quinhentos e sessenta e sete mil, oitocentos e noventa")
-    test(number_in_cardinal, 21345678901, "vinte e um bilhões, trezentos e quarenta e cinco milhões, seiscentos e setenta e oito mil, novecentos e um")
+    test(number_in_cardinal, 1000, "um mil")
+    test(number_in_cardinal, 1001, "um mil e um")
+    test(number_in_cardinal, 1010, "um mil e dez")
+    test(number_in_cardinal, 1011, "um mil e onze")
+    test(number_in_cardinal, 1234, "um mil e duzentos e trinta e quatro")
+    test(number_in_cardinal, 12345, "doze mil e trezentos e quarenta e cinco")
+    test(number_in_cardinal, 123456, "cento e vinte e três mil e quatrocentos e cinquenta e seis")
+    test(number_in_cardinal, 1234567, "um milhão e duzentos e trinta e quatro mil e quinhentos e sessenta e sete")
+    test(number_in_cardinal, 12345678, "doze milhões e trezentos e quarenta e cinco mil e seiscentos e setenta e oito")
+    test(number_in_cardinal, 123456789, "cento e vinte e três milhões e quatrocentos e cinquenta e seis mil e setecentos e oitenta e nove")
+    test(number_in_cardinal, 1234567890, "um bilhão e duzentos e trinta e quatro milhões e quinhentos e sessenta e sete mil e oitocentos e noventa")
+    test(number_in_cardinal, 21345678901, "vinte e um bilhões e trezentos e quarenta e cinco milhões e seiscentos e setenta e oito mil e novecentos e um")
     test(number_in_cardinal, 1000000000000, "um trilhão")
     test(number_in_cardinal, 10000000000000, "dez trilhões")
 
