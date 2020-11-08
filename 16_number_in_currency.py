@@ -3,11 +3,11 @@ number_in_cardinal = __import__('15_number_in_cardinal').number_in_cardinal
 """
 16. number in currency
 
-Dada um número, transcreva seu valor por extenso em reais, por exemplo:
+Dada um número, transcreva seu valor por extenso em reais e por exemplo:
 
 1.34 # => um real, trinta e quatro centavos
 5.0 # => cinco reais
-100.45 # => cem reais, quarenta e cinco centavos
+100.45 # => cem reais e quarenta e cinco centavos
 
 """
 def number_in_currency(number, currency=("real", "reais"), cent=("centavo", "centavos"), cents_sep=",", thousands_sep="."):
@@ -39,7 +39,7 @@ def number_in_currency(number, currency=("real", "reais"), cent=("centavo", "cen
 
     decimal_currency = f'{decimal_string} {currency_cents}'
     
-    return ', '.join([s for s in (integer_currency, decimal_currency) if s])
+    return ' e '.join([s for s in (integer_currency, decimal_currency) if s])
 
 # --- Daqui para baixo são apenas códigos auxiliáries de teste. ---
 
@@ -71,28 +71,26 @@ if __name__ == '__main__':
     test(number_in_currency, 134.0, "cento e trinta e quatro reais")
     test(number_in_currency, 252.0, "duzentos e cinquenta e dois reais")
     test(number_in_currency, 513.0, "quinhentos e treze reais")
-    test(number_in_currency, 1.34, "um real, trinta e quatro centavos")
-    test(number_in_currency, 100.45, "cem reais, quarenta e cinco centavos")
+    test(number_in_currency, 1.34, "um real e trinta e quatro centavos")
+    test(number_in_currency, 100.45, "cem reais e quarenta e cinco centavos")
     test(number_in_currency, 0.89, "oitenta e nove centavos")
     test(number_in_currency, 0.01, "um centavo")
-    test(number_in_currency, 999.99, "novecentos e noventa e nove reais, noventa e nove centavos")
+    test(number_in_currency, 999.99, "novecentos e noventa e nove reais e noventa e nove centavos")
     test(number_in_currency, 1000.0, "um mil reais")
-    test(number_in_currency, 1000.01, "um mil reais, um centavo")
-    test(number_in_currency, 1000.11, "um mil reais, onze centavos")
-    test(number_in_currency, 1234.56, "um mil, duzentos e trinta e quatro reais, cinquenta e seis centavos")
-    test(number_in_currency, 12345.67, "doze mil, trezentos e quarenta e cinco reais, sessenta e sete centavos")
-    test(number_in_currency, 123456.78, "cento e vinte e três mil, quatrocentos e cinquenta e seis reais, setenta e oito centavos")
+    test(number_in_currency, 1000.01, "um mil reais e um centavo")
+    test(number_in_currency, 1000.11, "um mil reais e onze centavos")
+    test(number_in_currency, 1234.56, "um mil e duzentos e trinta e quatro reais e cinquenta e seis centavos")
+    test(number_in_currency, 12345.67, "doze mil e trezentos e quarenta e cinco reais e sessenta e sete centavos")
+    test(number_in_currency, 123456.78, "cento e vinte e três mil e quatrocentos e cinquenta e seis reais e setenta e oito centavos")
     test(number_in_currency, 1000000.0, "um milhão de reais")
-    test(number_in_currency, 1234567.89, "um milhão, duzentos e trinta e quatro mil, quinhentos e sessenta e sete reais, oitenta e nove centavos")
-    test(number_in_currency, 12345678.9, "doze milhões, trezentos e quarenta e cinco mil, seiscentos e setenta e oito reais, noventa centavos")
-    test(number_in_currency, 12000000.01, "doze milhões de reais, um centavo")
+    test(number_in_currency, 1234567.89, "um milhão e duzentos e trinta e quatro mil e quinhentos e sessenta e sete reais e oitenta e nove centavos")
+    test(number_in_currency, 12345678.9, "doze milhões e trezentos e quarenta e cinco mil e seiscentos e setenta e oito reais e noventa centavos")
+    test(number_in_currency, 12000000.01, "doze milhões de reais e um centavo")
     test(number_in_currency, 21000000.0, "vinte e um milhões de reais")
-    test(number_in_currency, 123456789.01, "cento e vinte e três milhões, quatrocentos e cinquenta e seis mil, setecentos e oitenta e nove reais, um centavo")
+    test(number_in_currency, 123456789.01, "cento e vinte e três milhões e quatrocentos e cinquenta e seis mil e setecentos e oitenta e nove reais e um centavo")
     test(number_in_currency, 1000000000.0, "um bilhão de reais")
     test(number_in_currency, 4000000000.0, "quatro bilhões de reais")
-    test(number_in_currency, 9999000000.0, "nove bilhões, novecentos e noventa e nove milhões de reais")
+    test(number_in_currency, 9999000000.0, "nove bilhões e novecentos e noventa e nove milhões de reais")
     test(number_in_currency, 1000000000000.0, "um trilhão de reais")
     test(number_in_currency, 5000000000000.0, "cinco trilhões de reais")
     test(number_in_currency, 93, "noventa e três reais")
-    test(number_in_currency, False, "noventa e três reais")
-    # test(number_in_cardinal, "1.923,10", "um mil, novecentos e vinte e três reais, dez centavos")
