@@ -36,25 +36,24 @@ def number_in_cardinal(number, nindex=0):
 
     result = []
 
-    over_sum = 0
-    for divisor in reversed(OVER_THOUSANDS):
-        value = (number - over_sum) // divisor * divisor
+    calculated = 0
+    for divisor, suffix in reversed(OVER_THOUSANDS.items()):
+        value = (number - calculated) // divisor
         if not value: continue
 
-        over_sum += value
-        simple_value = value // divisor
-        ots = OVER_THOUSANDS[divisor]
-        _suffix = ots[0] if simple_value == 1 else ots[-1]
-        result.append(f'{number_in_cardinal(simple_value)} {_suffix}')
+        _suffix = suffix[0] if value == 1 else suffix[-1]
+
+        result.append(' '.join([s for s in [number_in_cardinal(value), _suffix] if s]))
+        calculated += value * divisor
 
     values_sum = 0
-    for dividor in reversed(PLACE_VALUES):
-        value = (number - over_sum - values_sum)
-        if not value in NUMBERS: value = (value // dividor) * dividor 
+    for divisor in reversed(PLACE_VALUES):
+        value = (number - calculated - values_sum)
+        if not value in NUMBERS: value = (value // divisor) * divisor 
         if not value: continue
 
-        values_sum += value
         result.append(number_in_cardinal(value, -1))
+        values_sum += value
 
     return ' e '.join(result)
 
@@ -103,5 +102,5 @@ if __name__ == '__main__':
     test(number_in_cardinal, 1234567890, "um bilhão e duzentos e trinta e quatro milhões e quinhentos e sessenta e sete mil e oitocentos e noventa")
     test(number_in_cardinal, 21345678901, "vinte e um bilhões e trezentos e quarenta e cinco milhões e seiscentos e setenta e oito mil e novecentos e um")
     test(number_in_cardinal, 1000000000000, "um trilhão")
-    test(number_in_cardinal, 10000000000000, "dez trilhões")
+    test(number_in_cardinal, 2000000000000, "dois trilhões")
 
