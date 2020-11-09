@@ -9,7 +9,7 @@ Dada um número, transcreva seu valor por extenso em reais, por exemplo:
 
 """
 
-PLACE_VALUES = (1, 10, 100)
+PLACE_VALUES = (100, 10, 1)
 
 NUMBERS = {
     0: ("zero",), 1: ("um",), 2: ("dois",), 3: ("três",), 4: ("quatro",), 5: ("cinco",),
@@ -23,37 +23,39 @@ NUMBERS = {
     700: ("setecentos",), 800: ("oitocentos",), 900: ("novecentos",),
 }
 
-OVER_THOUSANDS = {
-    10**3: ("mil",),
-    10**6: ("milhão", "milhões"),
-    10**9: ("bilhão", "bilhões"),
-    10**12: ("trilhão", "trilhões"),
-}
+THOUSAND = 1000
+
+OVER_THOUSANDS = (
+    (THOUSAND**4, ("trilhão", "trilhões")),
+    (THOUSAND**3, ("bilhão", "bilhões")),
+    (THOUSAND**2, ("milhão", "milhões")),
+    (THOUSAND, ("mil",)),
+)
 
 def number_in_cardinal(number, nindex=0):
     try: return NUMBERS[number][nindex]
-    except: pass
+    except KeyError: pass
 
     result = []
 
     calculated = 0
-    for divisor, suffix in reversed(OVER_THOUSANDS.items()):
-        value = (number - calculated) // divisor
-        if not value: continue
+    if number >= THOUSAND:
+        for divisor, suffix in OVER_THOUSANDS:
+            value = (number - calculated) // divisor
+            if not value: continue
 
-        _suffix = suffix[0] if value == 1 else suffix[-1]
+            _suffix = suffix[0] if value == 1 else suffix[-1]
 
-        result.append(' '.join([s for s in [number_in_cardinal(value), _suffix] if s]))
-        calculated += value * divisor
+            result.append(' '.join([s for s in [number_in_cardinal(value), _suffix] if s]))
+            calculated += value * divisor
 
-    values_sum = 0
-    for divisor in reversed(PLACE_VALUES):
-        value = (number - calculated - values_sum)
+    for divisor in PLACE_VALUES:
+        value = (number - calculated)
         if not value in NUMBERS: value = (value // divisor) * divisor 
         if not value: continue
 
         result.append(number_in_cardinal(value, -1))
-        values_sum += value
+        calculated += value
 
     return ' e '.join(result)
 
