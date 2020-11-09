@@ -39,7 +39,7 @@ def number_in_cardinal(number, nindex=0):
     try: return NUMBERS[number][nindex]
     except KeyError: pass
 
-    result = []
+    result = ''
 
     calculated = 0
     for divisor, suffix in DIVISORS:
@@ -47,20 +47,23 @@ def number_in_cardinal(number, nindex=0):
         if not value: break
 
         try: 
-            result.append(NUMBERS[value_base][nindex])
+            result += NUMBERS[value_base][nindex]
             break
         except KeyError:
             value //= divisor
             if value_base < THOUSAND: value *= divisor
             if not value: continue
 
+        result += number_in_cardinal(value, -1)
         _suffix = suffix[0] if value == 1 else suffix[-1]
+        if _suffix: result += ' ' + _suffix
 
-        result.append(' '.join([__suffix for __suffix in [number_in_cardinal(value, -1), _suffix] if __suffix]))
         if value_base >= THOUSAND: value *= divisor
         calculated += value
 
-    return ' e '.join(result)
+        if number - calculated: result += ' e '
+
+    return result
 
 
 # --- Daqui para baixo são apenas códigos auxiliáries de teste. ---
