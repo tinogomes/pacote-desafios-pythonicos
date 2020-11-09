@@ -8,7 +8,6 @@ Dada um número, transcreva seu valor por extenso em reais e por exemplo:
 1.34 # => um real, trinta e quatro centavos
 5.0 # => cinco reais
 100.45 # => cem reais e quarenta e cinco centavos
-
 """
 def number_in_currency(number, currency=("real", "reais"), cent=("centavo", "centavos"), cents_sep=",", thousands_sep="."):
     if isinstance(number, float) or isinstance(number, int):

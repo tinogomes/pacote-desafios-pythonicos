@@ -3,12 +3,12 @@
 
 Dada um número, transcreva seu valor por extenso em reais, por exemplo:
 
-1.34 # => um real, trinta e quatro centavos
-5.0 # => cinco reais
-100.45 # => cem reais, quarenta e cinco centavos
-
+1 # => um
+5 # => cinco
+100 # => cem
+101 # => cento e um
+192364 # => cento e noventa e dois mil e trezentos e sessenta e quatro
 """
-
 
 NUMBERS = {
     0: ("zero",), 1: ("um",), 2: ("dois",), 3: ("três",), 4: ("quatro",), 5: ("cinco",),
