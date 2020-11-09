@@ -9,7 +9,6 @@ Dada um número, transcreva seu valor por extenso em reais, por exemplo:
 
 """
 
-PLACE_VALUES = (100, 10, 1)
 
 NUMBERS = {
     0: ("zero",), 1: ("um",), 2: ("dois",), 3: ("três",), 4: ("quatro",), 5: ("cinco",),
@@ -24,12 +23,16 @@ NUMBERS = {
 }
 
 THOUSAND = 1000
+NO_SUFFIX = (None,)
 
-OVER_THOUSANDS = (
+DIVISORS = (
     (THOUSAND**4, ("trilhão", "trilhões")),
     (THOUSAND**3, ("bilhão", "bilhões")),
     (THOUSAND**2, ("milhão", "milhões")),
     (THOUSAND, ("mil",)),
+    (100, NO_SUFFIX),
+    (10, NO_SUFFIX),
+    (1, NO_SUFFIX),
 )
 
 def number_in_cardinal(number, nindex=0):
@@ -39,22 +42,22 @@ def number_in_cardinal(number, nindex=0):
     result = []
 
     calculated = 0
-    if number >= THOUSAND:
-        for divisor, suffix in OVER_THOUSANDS:
-            value = (number - calculated) // divisor
+    for divisor, suffix in DIVISORS:
+        value = value_base = number - calculated
+        if not value: break
+
+        try: 
+            result.append(NUMBERS[value_base][nindex])
+            break
+        except KeyError:
+            value //= divisor
+            if value_base < THOUSAND: value *= divisor
             if not value: continue
 
-            _suffix = suffix[0] if value == 1 else suffix[-1]
+        _suffix = suffix[0] if value == 1 else suffix[-1]
 
-            result.append(' '.join([s for s in [number_in_cardinal(value), _suffix] if s]))
-            calculated += value * divisor
-
-    for divisor in PLACE_VALUES:
-        value = (number - calculated)
-        if not value in NUMBERS: value = (value // divisor) * divisor 
-        if not value: continue
-
-        result.append(number_in_cardinal(value, -1))
+        result.append(' '.join([__suffix for __suffix in [number_in_cardinal(value, -1), _suffix] if __suffix]))
+        if value_base >= THOUSAND: value *= divisor
         calculated += value
 
     return ' e '.join(result)
