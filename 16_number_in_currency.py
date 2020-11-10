@@ -10,15 +10,9 @@ Dada um número, transcreva seu valor por extenso em reais e por exemplo:
 100.45 # => cem reais e quarenta e cinco centavos
 """
 def number_in_currency(number, currency=("real", "reais"), cent=("centavo", "centavos"), cents_sep=",", thousands_sep="."):
-    if isinstance(number, float) or isinstance(number, int):
-        number = f'{number:.02f}'
-    # elif isinstance(number, str):
-    #     for old, new in ((thousands_sep, ''), (cents_sep, '.')):
-    #         number = number.replace(old, new)
-    else:
-        raise AssertionError()
+    number_as_string = f'{number:.02f}'
 
-    integer, cents = [int(s) for s in number.split(".")]
+    integer, cents = [int(s) for s in number_as_string.split(".")]
     integer_string = number_in_cardinal(integer)
 
     currency = currency[0] if integer == 1 else currency[1]
