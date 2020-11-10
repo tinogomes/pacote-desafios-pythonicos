@@ -37,7 +37,7 @@ def number_in_currency(number, currency=("real", "reais"), cent=("centavo", "cen
     currency_cents = cent[1] if cents > 1 else cent[0]
 
     decimal_currency = f'{decimal_string} {currency_cents}'
-    
+
     return ' e '.join([s for s in (integer_currency, decimal_currency) if s])
 
 # --- Daqui para baixo são apenas códigos auxiliáries de teste. ---

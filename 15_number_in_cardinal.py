@@ -17,8 +17,8 @@ NUMBERS = {
     16: ("dezesseis",), 17: ("dezessete",), 18: ("dezoito",), 19: ("dezenove",),
     20: ("vinte",), 30: ("trinta",), 40: ("quarenta",), 50: ("cinquenta",),
     60: ("sessenta",), 70: ("setenta",), 80: ("oitenta",), 90: ("noventa",),
-    100: ("cem","cento",), 200: ("duzentos",), 300: ("trezentos",), 
-    400: ("quatrocentos",), 500: ("quinhentos",), 600: ("seiscentos",), 
+    100: ("cem","cento",), 200: ("duzentos",), 300: ("trezentos",),
+    400: ("quatrocentos",), 500: ("quinhentos",), 600: ("seiscentos",),
     700: ("setecentos",), 800: ("oitocentos",), 900: ("novecentos",),
 }
 
@@ -46,7 +46,7 @@ def number_in_cardinal(number, nindex=0):
         value = value_base = number - calculated
         if not value: break
 
-        try: 
+        try:
             result += NUMBERS[value_base][nindex]
             break
         except KeyError:
@@ -111,4 +111,3 @@ if __name__ == '__main__':
     test(number_in_cardinal, 21345678901, "vinte e um bilhões e trezentos e quarenta e cinco milhões e seiscentos e setenta e oito mil e novecentos e um")
     test(number_in_cardinal, 1000000000000, "um trilhão")
     test(number_in_cardinal, 2000000000000, "dois trilhões")
-
