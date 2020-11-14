@@ -10,23 +10,29 @@ A sua solução deve rodar em tempo linear, ou seja, deve fazer uma
 """
 
 def linear_merge(list1, list2):
-    if len(list1) < len(list2):
-        list2, list1 = list1, list2
-
     result = []
-    index = 0
+    index1 = 0
+    index2 = 0
 
-    for item in list1:
+    while len(result) < len(list1 + list2):
         try:
-            while list2[index] < item:
-                result.append(list2[index])
-                index += 1
+            if list1[index1] < list2[index2]:
+                result.append(list1[index1])
+                index1 += 1
+            else:
+                result.append(list2[index2])
+                index2 += 1
         except IndexError:
-            pass
-
-        result.append(item)
+            if index1 >= len(list1):
+                result.append(list2[index2])
+                index2 += 1
+            else:
+                result.append(list1[index1])
+                index1 += 1
 
     return result
+
+
 
 
 # --- Daqui para baixo são apenas códigos auxiliáries de teste. ---
@@ -50,6 +56,7 @@ def test(f, in_, expected):
 
 if __name__ == '__main__':
     # Testes que verificam o resultado do seu código em alguns cenários.
+    test(linear_merge, (['a'], ['b']), ['a', 'b'])
     test(linear_merge, (['aa', 'xx', 'zz'], ['bb', 'cc']),
          ['aa', 'bb', 'cc', 'xx', 'zz'])
     test(linear_merge, (['aa', 'xx'], ['bb', 'cc', 'zz']),
