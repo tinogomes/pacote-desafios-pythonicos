@@ -41,38 +41,28 @@ método que escolhe um elemento aleatório de uma lista não vazia.
 
 import random
 import sys
-import re
+from collections import defaultdict
+
+def extrair_palavras(filename):
+    with open(filename) as arquivo:
+        return arquivo.read().split()
 
 def mimic_dict(filename):
     """
     Retorna o dicionario imitador mapeando cada palavra para a lista de palavras subsequentes.
     """
-    file = open(filename, 'r')
 
-    words = {'': None}
+    dicionario = defaultdict(lambda : [])
 
-    for line in file.readlines():
-        words_on_line = line.split()
-        words_on_line = list(map(lambda s: s.lower(), words_on_line))
-        words_on_line = list(map(lambda s: re.sub(r'\W', '', s), words_on_line))
+    ultima_palavra = ''
 
-        for i in list(range(len(words_on_line))):
-            word = words_on_line[i]
+    for palavra in extrair_palavras(filename):
+        dicionario[ultima_palavra].append(palavra)
+        ultima_palavra = palavra
 
-            if not words['']:
-                words[''] = [word]
+    dicionario[ultima_palavra] = ['']
 
-            related_words = words_on_line[min(i,len(words_on_line)):]
-
-            words.setdefault(word, [])
-
-            {words[word].append(related_word) for related_word in related_words if not related_word == word }
-
-            {words[word].remove(related_word) for related_word in words[word] if len(word) <= 3 and len(related_word) <= 3}
-
-            words[word] = list(set(words[word]))
-
-    return words
+    return dicionario
 
 
 def print_mimic(mimic_dict, word):
@@ -80,27 +70,17 @@ def print_mimic(mimic_dict, word):
     Dado o dicionario imitador e a palavra inicial, imprime texto de 200 palavras.
     """
 
-    count = 0
     sentence = []
     last_word = word
 
-    if word:
-        sentence.append(word)
-
-    while count < 200:
-        if len(mimic_dict[last_word]) == 0:
-            break
-
-        last_word = random.choice(list(mimic_dict[last_word]))
-
-        count += 1
+    while len(sentence) < 200:
+        last_word = random.choice(mimic_dict[last_word])
 
         sentence.append(last_word)
 
+        if last_word.endswith('.'): break
+
     print(' '.join(sentence))
-
-
-    return
 
 
 # Chama mimic_dict() e print_mimic()
